@@ -50,6 +50,7 @@ public partial class Global : Node
 		}
 	}
 
+
 	/// <summary>增加分数</summary>
 	/// <param name="points">分数</param>
 	public void AddScore(int points)
