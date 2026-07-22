@@ -1,0 +1,91 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2q5m1x3k7f8l"]
+
+[ext_resource type="Script" path="res://src/Player/Player.cs" id="1_7f3ge"]
+[ext_resource type="Script" path="res://src/Camera/GameCamera.cs" id="2_kj5he"]
+[ext_resource type="Script" path="res://src/UI/HUD.cs" id="3_l9m2p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7y2fh"]
+size = Vector2(32, 32)
+
+[node name="Level" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("1_7f3ge")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_7y2fh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+position = Vector2(0, -16)
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+script = ExtResource("2_kj5he")
+Target = NodePath("../Player")
+SmoothFollow = true
+FollowSpeed = 8.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("3_l9m2p")
+
+[node name="ScoreLabel" type="Label" parent="HUD"]
+offset_left = 20
+offset_top = 20
+theme_override_font_sizes/font_size = 24
+text = "Score: 0"
+
+[node name="LivesLabel" type="Label" parent="HUD"]
+offset_left = 20
+offset_top = 50
+theme_override_font_sizes/font_size = 20
+text = "Lives: 3"
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+anchors_preset = 2
+anchor_right = 1.0
+offset_right = -20
+offset_top = 20
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+text = "00:00"
+
+[node name="GameOverLabel" type="Label" parent="HUD"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "GAME OVER"
+modulate = Color(1, 0.2, 0.2, 1)
+visible = false
+
+[node name="PauseOverlay" type="ColorRect" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.5)
+mouse_filter = 1
+visible = false
+
+[node name="PauseLabel" type="Label" parent="HUD/PauseOverlay"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "PAUSED"
