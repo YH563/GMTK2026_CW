@@ -15,23 +15,23 @@ GameTemplate/
 │   └── Level.tscn             #   游戏关卡场景
 │
 └── src/                       # ── C# 源码 ──
-    ├── Global.cs              #   [全局] 游戏管理器（自动加载）
-    │
-    ├── Player/
-    │   └── Player.cs          #   GameTemplate.Player — 2D 角色控制器
-    │
-    ├── Camera/
-    │   └── GameCamera.cs      #   GameTemplate.Camera — 摄像机跟随 + 震动
-    │
-    ├── Managers/
-    │   └── AudioManager.cs    #   GameTemplate.Managers — 音频管理（自动加载）
-    │
-    ├── UI/
-    │   ├── HUD.cs             #   GameTemplate.UI — 游戏内 HUD
-    │   └── MainMenu.cs        #   GameTemplate.UI — 主菜单逻辑
-    │
-    └── Utils/
-        └── Extensions.cs      #   GameTemplate.Utils — 工具扩展方法
+	├── Global.cs              #   [全局] 游戏管理器（自动加载）
+	│
+	├── Player/
+	│   └── Player.cs          #   GameTemplate.Player — 2D 角色控制器
+	│
+	├── Camera/
+	│   └── GameCamera.cs      #   GameTemplate.Camera — 摄像机跟随 + 震动
+	│
+	├── Managers/
+	│   └── AudioManager.cs    #   GameTemplate.Managers — 音频管理（自动加载）
+	│
+	├── UI/
+	│   ├── HUD.cs             #   GameTemplate.UI — 游戏内 HUD
+	│   └── MainMenu.cs        #   GameTemplate.UI — 主菜单逻辑
+	│
+	└── Utils/
+		└── Extensions.cs      #   GameTemplate.Utils — 工具扩展方法
 ```
 
 ## 快速开始
@@ -156,15 +156,15 @@ GameTemplate/
 // 示例：Area2D 收集物
 public partial class Coin : Area2D
 {
-    private void OnBodyEntered(Node2D body)
-    {
-        if (body is Player)
-        {
-            Global.Instance?.AddScore(100);
-            AudioManager.Instance?.PlaySfx(myCoinSound);
-            QueueFree();
-        }
-    }
+	private void OnBodyEntered(Node2D body)
+	{
+		if (body is Player)
+		{
+			Global.Instance?.AddScore(100);
+			AudioManager.Instance?.PlaySfx(myCoinSound);
+			QueueFree();
+		}
+	}
 }
 ```
 

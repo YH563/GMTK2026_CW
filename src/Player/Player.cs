@@ -1,149 +1,82 @@
 using Godot;
-using System;
 
 namespace GameTemplate.Player;
 
+/// <summary>
+/// 平台跳跃角色控制器
+/// 控制：A/D 或 ←/→ 左右移动，Space 跳跃
+/// </summary>
 public partial class Player : CharacterBody2D
 {
-	[ExportGroup("Movement")]
-	[Export] public float Speed { get; set; } = 200.0f;
+	// ===== 可调参数 =====
+	[ExportGroup("移动")]
+	[Export] public float Speed { get; set; } = 300.0f;
 	[Export] public float Acceleration { get; set; } = 1200.0f;
-	[Export] public float Friction { get; set; } = 800.0f;
 
-	[ExportGroup("Jump (Platformer Mode)")]
-	[Export] public bool EnableJump { get; set; } = false;
-	[Export] public float JumpVelocity { get; set; } = -400.0f;
-	[Export] public float Gravity { get; set; } = 980.0f;
+	[ExportGroup("跳跃")]
+	[Export] public float JumpVelocity { get; set; } = -450.0f;
+	[Export] public float Gravity { get; set; } = 1200.0f;
 
-	[ExportGroup("Dash")]
-	[Export] public bool EnableDash { get; set; } = false;
-	[Export] public float DashSpeed { get; set; } = 600.0f;
-	[Export] public float DashDuration { get; set; } = 0.2f;
-	[Export] public float DashCooldown { get; set; } = 1.0f;
-
-	[ExportGroup("References")]
+	[ExportGroup("外观")]
 	[Export] public AnimatedSprite2D AnimatedSprite { get; set; }
-	[Export] public Area2D InteractionArea { get; set; }
 
-	// 状态
-	private Vector2 _moveDirection;
-	private bool _isDashing;
-	private float _dashTimer;
-	private float _dashCooldownTimer;
+	// ===== 内部状态 =====
+	private float _horizontalInput;
 
 	public override void _Ready()
 	{
-		if (AnimatedSprite == null)
-			AnimatedSprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
-
-		if (InteractionArea == null)
-			InteractionArea = GetNodeOrNull<Area2D>("InteractionArea");
+		AnimatedSprite ??= GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		float dt = (float)delta;
 
-		if (EnableJump)
-			HandlePlatformerMovement(dt);
-		else
-			HandleTopDownMovement(dt);
-	}
+		// 1. 读取输入
+		_horizontalInput = Input.GetAxis("move_left", "move_right");
 
-	private void HandleTopDownMovement(float dt)
-	{
-		// 获取输入方向
-		_moveDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
-
-		// 带加速/摩擦的平滑移动
-		if (_moveDirection != Vector2.Zero)
-		{
-			Velocity = Velocity.MoveToward(_moveDirection * Speed, Acceleration * dt);
-			UpdateAnimation(_moveDirection);
-		}
-		else
-		{
-			Velocity = Velocity.MoveToward(Vector2.Zero, Friction * dt);
-		}
-
-		MoveAndSlide();
-	}
-
-	private void HandlePlatformerMovement(float dt)
-	{
-		// 应用重力
+		// 2. 应用重力
 		if (!IsOnFloor())
-			Velocity = Velocity with { Y = Velocity.Y + Gravity * dt };
+			Velocity = new Vector2(Velocity.X, Velocity.Y + Gravity * dt);
 
-		// 水平输入
-		float horizontalInput = Input.GetAxis("move_left", "move_right");
-		Vector2 targetVelocity = new Vector2(horizontalInput * Speed, Velocity.Y);
+		// 3. 水平移动（带加速平滑）
+		float targetSpeed = _horizontalInput * Speed;
 		Velocity = new Vector2(
-			Mathf.MoveToward(Velocity.X, targetVelocity.X, Acceleration * dt),
-			targetVelocity.Y
+			Mathf.MoveToward(Velocity.X, targetSpeed, Acceleration * dt),
+			Velocity.Y
 		);
 
-		// 跳跃
+		// 4. 跳跃
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
-		{
 			Velocity = new Vector2(Velocity.X, JumpVelocity);
-		}
 
-		// 冲刺
-		if (EnableDash && Input.IsActionJustPressed("dash") && !_isDashing && _dashCooldownTimer <= 0)
-		{
-			StartDash();
-		}
-
-		if (_isDashing)
-			UpdateDash(dt);
-
-		_dashCooldownTimer -= dt;
-
+		// 5. 执行移动
 		MoveAndSlide();
-		UpdateAnimation(new Vector2(horizontalInput, 0));
+
+		// 6. 更新动画
+		UpdateAnimation();
 	}
 
-	private void StartDash()
-	{
-		_isDashing = true;
-		_dashTimer = DashDuration;
-		_dashCooldownTimer = DashCooldown;
-		Vector2 dashDir = _moveDirection != Vector2.Zero ? _moveDirection.Normalized() : Vector2.Right;
-		Velocity = dashDir * DashSpeed;
-	}
-
-	private void UpdateDash(float dt)
-	{
-		_dashTimer -= dt;
-		if (_dashTimer <= 0)
-		{
-			_isDashing = false;
-			Velocity *= 0.5f;
-		}
-	}
-
-	private void UpdateAnimation(Vector2 direction)
+	private void UpdateAnimation()
 	{
 		if (AnimatedSprite == null) return;
 
-		// 根据方向翻转精灵
-		if (direction.X != 0)
-			AnimatedSprite.Scale = new Vector2(Mathf.Sign(direction.X), 1);
+		// 左右翻转
+		if (_horizontalInput != 0)
+			AnimatedSprite.Scale = new Vector2(Mathf.Sign(_horizontalInput), 1);
 
-		// 播放动画（需要在编辑器中创建 walk 和 idle 动画）
-		if (AnimatedSprite.SpriteFrames.HasAnimation("walk") && direction != Vector2.Zero)
+		// 切换动画
+		if (_horizontalInput != 0 && AnimatedSprite.SpriteFrames.HasAnimation("walk"))
 			AnimatedSprite.Play("walk");
 		else if (AnimatedSprite.SpriteFrames.HasAnimation("idle"))
 			AnimatedSprite.Play("idle");
 	}
 
-	/// <summary>获取角色当前面朝的方向</summary>
-	/// <returns>单位方向向量</returns>
+	/// <summary>获取面朝方向（单位向量）</summary>
 	public Vector2 GetFacingDirection()
 	{
-		if (_moveDirection != Vector2.Zero)
-			return _moveDirection.Normalized();
+		if (_horizontalInput != 0)
+			return new Vector2(Mathf.Sign(_horizontalInput), 0);
 		return Vector2.Right * Mathf.Sign(AnimatedSprite?.Scale.X ?? 1);
 	}
 }
