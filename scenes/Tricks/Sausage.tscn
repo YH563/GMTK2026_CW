@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cu488xecmujp8"]
+
+[ext_resource type="Texture2D" uid="uid://cvtd247vssrda" path="res://Assets/Tricks/tile_0061.png" id="1_eppwp"]
+[ext_resource type="Script" uid="uid://cftq8avcpsbmy" path="res://src/Objects/Sausage.cs" id="1_ncnld"]
+[ext_resource type="Texture2D" uid="uid://dgmer8kquf60f" path="res://Assets/Tricks/tile_0062.png" id="2_ncnld"]
+[ext_resource type="Texture2D" uid="uid://brmji0sqagn8c" path="res://Assets/Tricks/tile_0063.png" id="3_i3nig"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2sqtd"]
+size = Vector2(18, 18)
+
+[node name="Sausage" type="Node2D" unique_id=1844355258]
+script = ExtResource("1_ncnld")
+Length = 6
+
+[node name="Left" type="CharacterBody2D" parent="." unique_id=379700478]
+
+[node name="Sprite2D" type="Sprite2D" parent="Left" unique_id=996572600]
+texture = ExtResource("1_eppwp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left" unique_id=1208009373]
+shape = SubResource("RectangleShape2D_2sqtd")
+
+[node name="Middle" type="CharacterBody2D" parent="." unique_id=94549871]
+position = Vector2(18, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Middle" unique_id=1288599073]
+texture = ExtResource("2_ncnld")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Middle" unique_id=682090458]
+shape = SubResource("RectangleShape2D_2sqtd")
+
+[node name="Right" type="CharacterBody2D" parent="." unique_id=1471126522]
+position = Vector2(36, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Right" unique_id=2102138889]
+texture = ExtResource("3_i3nig")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right" unique_id=703201341]
+shape = SubResource("RectangleShape2D_2sqtd")

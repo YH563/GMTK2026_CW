@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ch48jowxpwutn"]
+
+[ext_resource type="Texture2D" uid="uid://cmiv5kaesph44" path="res://Assets/Tricks/tile_0027.png" id="1_iwpb3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nn4hq"]
+size = Vector2(18, 18)
+
+[node name="BreadMiddle" type="CharacterBody2D" unique_id=1728310057]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=932494417]
+texture = ExtResource("1_iwpb3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2056092831]
+shape = SubResource("RectangleShape2D_nn4hq")

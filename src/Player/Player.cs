@@ -1,13 +1,18 @@
 using Godot;
+using System;
 
 namespace GameTemplate.Player;
 
 /// <summary>
 /// 平台跳跃角色控制器
-/// 控制：A/D 或 ←/→ 左右移动，Space 跳跃
+/// 控制：A/D 或 ←/→ 左右移动，Space 跳跃，E 交互
 /// </summary>
 public partial class Player : CharacterBody2D
 {
+	// ===== 事件委托 =====
+	/// <summary>按下交互键时触发，其他机关订阅此事件</summary>
+	public event Action OnInteracted;
+
 	// ===== 可调参数 =====
 	[ExportGroup("移动")]
 	[Export] public float Speed { get; set; } = 300.0f;
@@ -50,10 +55,14 @@ public partial class Player : CharacterBody2D
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 			Velocity = new Vector2(Velocity.X, JumpVelocity);
 
-		// 5. 执行移动
+		// 5. 交互
+		if (Input.IsActionJustPressed("interact"))
+			OnInteracted?.Invoke();
+
+		// 6. 执行移动
 		MoveAndSlide();
 
-		// 6. 更新动画
+		// 7. 更新动画
 		UpdateAnimation();
 	}
 
@@ -65,11 +74,16 @@ public partial class Player : CharacterBody2D
 		if (_horizontalInput != 0)
 			AnimatedSprite.Scale = new Vector2(Mathf.Sign(_horizontalInput), 1);
 
-		// 切换动画
-		if (_horizontalInput != 0 && AnimatedSprite.SpriteFrames.HasAnimation("walk"))
-			AnimatedSprite.Play("walk");
-		else if (AnimatedSprite.SpriteFrames.HasAnimation("idle"))
-			AnimatedSprite.Play("idle");
+		// 跳跃动画优先
+		if (!IsOnFloor() && AnimatedSprite.SpriteFrames.HasAnimation("Jump"))
+		{
+			AnimatedSprite.Play("Jump");
+		}
+		// 切换地面动画
+		else if (_horizontalInput != 0 && AnimatedSprite.SpriteFrames.HasAnimation("Walk"))
+			AnimatedSprite.Play("Walk");
+		else if (AnimatedSprite.SpriteFrames.HasAnimation("Idle"))
+			AnimatedSprite.Play("Idle");
 	}
 
 	/// <summary>获取面朝方向（单位向量）</summary>
