@@ -4,7 +4,6 @@ using GameTemplate.Player;
 
 namespace GameTemplate.Tricks;
 
-[Tool]
 public partial class Sausage : Node2D
 {
 	[Export]
@@ -20,6 +19,10 @@ public partial class Sausage : Node2D
 	[Export]
 	public Vector2 MoveDir { get; set; } = new Vector2(1,0);  // 移动方向
 
+	[ExportGroup("交互")]
+	[Export]
+	public InteractButton ButtonNode { get; set; }  // 关联的按钮区域
+
 	// 你需要几个字段来跟踪动画状态
 	private bool _isAnimating = false;
 	private float _animTime = 0f;
@@ -34,6 +37,11 @@ public partial class Sausage : Node2D
 		if (MoveDir.X * MoveDir.Y != 0 && (float.Abs(MoveDir.X) != 1 || float.Abs(MoveDir.Y) != 1))
 		{
 			GD.PrintErr("方向设置错误");
+		}
+		if (PlayerObject == null)
+		{
+			GD.PrintErr("[Sausage] PlayerObject 未赋值！");
+			return;
 		}
 		_player = PlayerObject.GetNode<Player.Player>("Body");
 		_player.OnInteracted += TogglePan;
@@ -80,6 +88,8 @@ public partial class Sausage : Node2D
 
 	private void TogglePan()
 	{
+		// 玩家必须在按钮区域内才能触发
+		if (ButtonNode != null && !ButtonNode.IsPlayerInRange) return;
 		if (_isAnimating) return;
 		_isAnimating = true;
 		_animTime = 0f;

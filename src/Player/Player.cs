@@ -28,6 +28,10 @@ public partial class Player : CharacterBody2D
 	// ===== 内部状态 =====
 	private float _horizontalInput;
 
+	// ===== 外力系统 =====
+	private Vector2 _externalForce;
+	private const float ExternalForceDamping = 0.85f;
+
 	public override void _Ready()
 	{
 		AnimatedSprite ??= GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
@@ -55,14 +59,23 @@ public partial class Player : CharacterBody2D
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 			Velocity = new Vector2(Velocity.X, JumpVelocity);
 
-		// 5. 交互
+		// 5. 应用外力（叠加到速度上，然后逐渐衰减）
+		if (_externalForce != Vector2.Zero)
+		{
+			Velocity += _externalForce;
+			_externalForce *= ExternalForceDamping;
+			if (_externalForce.LengthSquared() < 1f)
+				_externalForce = Vector2.Zero;
+		}
+
+		// 6. 交互
 		if (Input.IsActionJustPressed("interact"))
 			OnInteracted?.Invoke();
 
-		// 6. 执行移动
+		// 7. 执行移动
 		MoveAndSlide();
 
-		// 7. 更新动画
+		// 8. 更新动画
 		UpdateAnimation();
 	}
 
@@ -84,6 +97,13 @@ public partial class Player : CharacterBody2D
 			AnimatedSprite.Play("Walk");
 		else if (AnimatedSprite.SpriteFrames.HasAnimation("Idle"))
 			AnimatedSprite.Play("Idle");
+	}
+
+	/// <summary>由外部施加一个力（如击退、风、弹射）</summary>
+	/// <param name="force">力的向量，会累加到现有外力上</param>
+	public void ApplyForce(Vector2 force)
+	{
+		_externalForce += force;
 	}
 
 	/// <summary>获取面朝方向（单位向量）</summary>

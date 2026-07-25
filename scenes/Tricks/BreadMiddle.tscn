@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nn4hq"]
 size = Vector2(18, 18)
 
-[node name="BreadMiddle" type="CharacterBody2D" unique_id=1728310057]
+[node name="BreadMiddle" type="StaticBody2D" unique_id=862033911]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=932494417]
 texture = ExtResource("1_iwpb3")

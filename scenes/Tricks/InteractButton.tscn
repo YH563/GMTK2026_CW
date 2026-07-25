@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bi0j602oi0usc"]
+
+[ext_resource type="Script" uid="uid://drcr6qb7u2e34" path="res://src/Objects/InteractButton.cs" id="1_xjdxp"]
+[ext_resource type="Texture2D" uid="uid://dr67urpe1wool" path="res://Assets/Tricks/tile_0042.png" id="2_58vak"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6q8qt"]
+size = Vector2(18, 18)
+
+[node name="Area2D" type="Area2D" unique_id=150049346]
+script = ExtResource("1_xjdxp")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=526804234]
+texture = ExtResource("2_58vak")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=338936580]
+shape = SubResource("RectangleShape2D_6q8qt")
