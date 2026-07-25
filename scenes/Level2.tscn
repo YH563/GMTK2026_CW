@@ -7,12 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://bl1u1qa0taswj" path="res://scenes/Tricks/Wine.tscn" id="5_qe5b6"]
 [ext_resource type="PackedScene" uid="uid://cu488xecmujp8" path="res://scenes/Tricks/Sausage.tscn" id="6_4p0dt"]
 [ext_resource type="Script" uid="uid://dgwhxr5bm1xpc" path="res://src/Camera/GameCamera.cs" id="7_qwp14"]
+[ext_resource type="PackedScene" uid="uid://b4u33ltxy1814" path="res://scenes/Tricks/Candle.tscn" id="8_xpq2v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwp14"]
-size = Vector2(39, 870)
+size = Vector2(38.75, 853.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xpq2v"]
-size = Vector2(38, 1437)
+size = Vector2(35.00006, 1440)
 
 [node name="Level2" type="Node2D" unique_id=11177668]
 
@@ -93,27 +94,36 @@ Target = NodePath("../Player")
 [node name="AirWall" type="StaticBody2D" parent="." unique_id=2102684234]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AirWall" unique_id=470824602]
-position = Vector2(-18.5, 425)
+position = Vector2(-19.375, 419.25)
 shape = SubResource("RectangleShape2D_qwp14")
 
 [node name="AirWall2" type="StaticBody2D" parent="." unique_id=242726978]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AirWall2" unique_id=259190578]
-position = Vector2(1461, 423)
+position = Vector2(1460.25, 420.5)
 shape = SubResource("RectangleShape2D_qwp14")
 
 [node name="AirWall3" type="StaticBody2D" parent="." unique_id=1383973137]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AirWall3" unique_id=1303732254]
-position = Vector2(721.5, 831)
+position = Vector2(720, 829.5)
 rotation = 1.5707964
 shape = SubResource("RectangleShape2D_xpq2v")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=109815526]
+visible = false
 color = Color(0, 0, 0, 1)
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=604073329]
 z_index = -1
-offset_right = 1433.0
-offset_bottom = 808.0
+offset_right = 1440.0
+offset_bottom = 811.0
 color = Color(0.44336173, 0.189919, 0.09450758, 1)
+
+[node name="Candle" parent="ColorRect" unique_id=338929938 node_paths=PackedStringArray("PlayerObject") instance=ExtResource("8_xpq2v")]
+position = Vector2(639, 583)
+PlayerObject = NodePath("../../Player")
+
+[node name="Candle" parent="." unique_id=85756073 node_paths=PackedStringArray("PlayerObject") instance=ExtResource("8_xpq2v")]
+position = Vector2(137, 277)
+PlayerObject = NodePath("../Player")

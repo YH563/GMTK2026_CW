@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://b4u33ltxy1814"]
+
+[ext_resource type="Texture2D" uid="uid://686s1oqi8xye" path="res://Assets/Tricks/tile_0096.png" id="1_6nk0w"]
+[ext_resource type="Script" uid="uid://4gf5sj8yf3io" path="res://src/Objects/Candle.cs" id="1_udc7w"]
+[ext_resource type="Texture2D" uid="uid://c3biv0rdgxpce" path="res://Assets/Tricks/tile_0080.png" id="2_udc7w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pdax4"]
+size = Vector2(18, 36)
+
+[sub_resource type="Gradient" id="Gradient_6nk0w"]
+offsets = PackedFloat32Array(0.54946995, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_udc7w"]
+gradient = SubResource("Gradient_6nk0w")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8153846, 0.23076923)
+
+[node name="Candle" type="Area2D" unique_id=338929938 node_paths=PackedStringArray("Light")]
+script = ExtResource("1_udc7w")
+Light = NodePath("PointLight2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1265960191]
+texture = ExtResource("1_6nk0w")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=2143637293]
+position = Vector2(0, -18)
+texture = ExtResource("2_udc7w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=351068376]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_pdax4")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1745858607]
+blend_mode = 2
+texture = SubResource("GradientTexture2D_udc7w")
