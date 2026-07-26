@@ -4,12 +4,33 @@
 [ext_resource type="PackedScene" uid="uid://ch48jowxpwutn" path="res://scenes/Tricks/BreadMiddle.tscn" id="2_6ihyy"]
 [ext_resource type="PackedScene" uid="uid://ciit54nq874li" path="res://scenes/Tricks/BreadHead.tscn" id="3_ua5p5"]
 
-[node name="Bread" type="Node2D" unique_id=1949880376 node_paths=PackedStringArray("Middle", "Head")]
+[sub_resource type="LabelSettings" id="LabelSettings_6ihyy"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Bread" type="Node2D" unique_id=1949880376 node_paths=PackedStringArray("Middle", "Head", "Label")]
 script = ExtResource("1_ua5p5")
 Middle = NodePath("BreadMiddle")
 Head = NodePath("BreadHead")
+Label = NodePath("Label")
 
 [node name="BreadMiddle" parent="." unique_id=1728310057 instance=ExtResource("2_6ihyy")]
 
 [node name="BreadHead" parent="." unique_id=1706767299 instance=ExtResource("3_ua5p5")]
 position = Vector2(18, 0)
+
+[node name="Label" type="Label" parent="." unique_id=1747184669]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -11.5
+offset_right = 9.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "5"
+label_settings = SubResource("LabelSettings_6ihyy")
+horizontal_alignment = 1
+vertical_alignment = 1

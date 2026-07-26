@@ -23,8 +23,11 @@ public partial class Sausage : Node2D
 	[Export]
 	public InteractButton ButtonNode { get; set; }  // 关联的按钮区域
 
-	// 你需要几个字段来跟踪动画状态
-	private bool _isAnimating = false;
+    [ExportGroup("倒计时显示")]
+    [Export]
+    public Label Label { get; set; }
+
+    private bool _isAnimating = false;
 	private float _animTime = 0f;
 	private float _animHalfDuration = 0f;
 	private float _animSpeed = 0f;
@@ -67,15 +70,30 @@ public partial class Sausage : Node2D
 				GD.PrintErr("[Sausage] 未找到子对象 Middle 或 Right");
 			}
 		}
-	}
+        // 倒计时标签
+        if (Label == null)
+        {
+            Label = new Label();
+            Label.Name = "CountdownLabel";
+            Label.Position = new Vector2(-40, -20);
+            Label.HorizontalAlignment = HorizontalAlignment.Center;
+            AddChild(Label);
+        }
+		Label.Position = new Vector2((Length - 2) * 9, -12);
+        Label.Visible = false;
+    }
 
 	public override void _Process(double delta)
 	{
 		if (!_isAnimating) return;
 		_animTime += (float)delta;
-		if (_animTime >= AnimDuration)
+        float remaining = AnimDuration - _animTime;
+        if (remaining < 0f) remaining = 0f;
+        Label.Text = Mathf.CeilToInt(remaining).ToString();
+        if (_animTime >= AnimDuration)
 		{
 			_isAnimating = false;
+			Label.Visible = false;
             MoveDir = -MoveDir;
         }
 		if (_animTime >= _animHalfDuration && turn)
@@ -94,6 +112,7 @@ public partial class Sausage : Node2D
 		_isAnimating = true;
 		_animTime = 0f;
 		turn = true;
+		Label.Visible = true;
 	}
 
     public override void _ExitTree()

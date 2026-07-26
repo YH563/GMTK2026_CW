@@ -8,9 +8,13 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2sqtd"]
 size = Vector2(18, 18)
 
-[node name="Sausage" type="Node2D" unique_id=1844355258]
+[sub_resource type="LabelSettings" id="LabelSettings_ncnld"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Sausage" type="Node2D" unique_id=1844355258 node_paths=PackedStringArray("Label")]
 script = ExtResource("1_ncnld")
 Length = 6
+Label = NodePath("Label")
 
 [node name="Left" type="CharacterBody2D" parent="." unique_id=379700478]
 
@@ -37,3 +41,20 @@ texture = ExtResource("3_i3nig")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Right" unique_id=703201341]
 shape = SubResource("RectangleShape2D_2sqtd")
+
+[node name="Label" type="Label" parent="." unique_id=1181926538]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -11.5
+offset_right = 9.0
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "5"
+label_settings = SubResource("LabelSettings_ncnld")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -28,11 +28,16 @@ public partial class Bread : Node2D
     [Export]
     public InteractButton ButtonNode { get; set; }  // 关联的按钮区域
 
+    [ExportGroup("倒计时显示")]
+    [Export]
+    public Label Label { get; set; }
+
     private List<Node2D> _middles = new List<Node2D>();
 
     // 动画状态
     private bool _isAnimating = false;
     private float _animTime = 0f;
+    private int _growStep = 0;  // 计时器触发计数，用于区分生长/缩回阶段
     private Timer _timer;
     private float _waitTime;
     private float _animHalfDuration = 0f;
@@ -67,24 +72,53 @@ public partial class Bread : Node2D
         _waitTime = _animHalfDuration / GrowLength;
         _timer.WaitTime = _waitTime;
         _timer.Timeout += Grow;
+
+        // 倒计时标签
+        if (Label == null)
+        {
+            Label = new Label();
+            Label.Name = "CountdownLabel";
+            Label.Position = new Vector2(-40, -20);
+            Label.HorizontalAlignment = HorizontalAlignment.Center;
+            AddChild(Label);
+        }
+        // 反向旋转，让标签始终正向显示
+        Label.Rotation = -Rotation;
+        Label.Visible = false;
     }
 
     public override void _Process(double delta)
     {
         if (!_isAnimating) return;
         _animTime += (float)delta;
+
+        // 更新倒计时
+        float remaining = AnimDuration - _animTime;
+        if (remaining < 0f) remaining = 0f;
+        Label.Text = Mathf.CeilToInt(remaining).ToString();
+
+        // 安全网：超出总时长时强制结束动画（不停止计时器，由 Grow() 自行管理）
         if (_animTime > AnimDuration)
         {
             _isAnimating = false;
-            _timer.Stop();  // 停止计时器
-            if(_middles.Count == 2) ReduceMiddle();
         }
     }
 
     private void Grow()
     {
-        if (_animTime <= _animHalfDuration) AddMiddle();
-        if (_animTime > _animHalfDuration && _animTime <= AnimDuration) ReduceMiddle();
+        if (_growStep < GrowLength)
+            AddMiddle();
+        else
+            ReduceMiddle();
+
+        _growStep++;
+
+        if (_growStep >= GrowLength * 2)
+        {
+            _isAnimating = false;
+            _timer.Stop();
+            Label.Visible = false;
+        }
     }
 
     private void TogglePan()
@@ -95,6 +129,8 @@ public partial class Bread : Node2D
         if (_isAnimating) return;
         _isAnimating = true;
         _animTime = 0f;
+        _growStep = 0;
+        Label.Visible = true;
         _timer.Start();
     }
 

@@ -19,9 +19,13 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.8153846, 0.23076923)
 
-[node name="Candle" type="Area2D" unique_id=338929938 node_paths=PackedStringArray("Light")]
+[sub_resource type="LabelSettings" id="LabelSettings_udc7w"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Candle" type="Area2D" unique_id=338929938 node_paths=PackedStringArray("Light", "Label")]
 script = ExtResource("1_udc7w")
 Light = NodePath("PointLight2D")
+Label = NodePath("Label2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1265960191]
 texture = ExtResource("1_6nk0w")
@@ -37,3 +41,20 @@ shape = SubResource("RectangleShape2D_pdax4")
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1745858607]
 blend_mode = 2
 texture = SubResource("GradientTexture2D_udc7w")
+
+[node name="Label2" type="Label" parent="." unique_id=1239267236]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -12.0
+offset_right = 9.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "5"
+label_settings = SubResource("LabelSettings_udc7w")
+horizontal_alignment = 1
+vertical_alignment = 1

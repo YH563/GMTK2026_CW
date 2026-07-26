@@ -31,9 +31,17 @@ public partial class Wine : Node2D
     [Export]
     public Node2D PlayerObject { get; set; }  // 拖入场景中的 Player 节点
 
+    [ExportGroup("倒计时显示")]
+    [Export]
+    public Label Label { get; set; }
+
     private Player.Player _player;
     private bool _playerInArea = false;    // 玩家是否在受力区域内
     private bool _isSpraying = false;      // 粒子喷射中
+
+    // 倒计时
+    private float _sprayTimer = 0f;        // 已喷射时间
+    private float _sprayDuration = 0f;     // 喷射总时长（来自 Particles.Lifetime）
 
     public override void _Ready()
     {
@@ -62,10 +70,42 @@ public partial class Wine : Node2D
         // 监听粒子播放结束
         if (Particles != null)
             Particles.Finished += OnParticlesFinished;
+
+        // 倒计时标签初始化
+        if (Label == null)
+        {
+            Label = new Label();
+            Label.Name = "CountdownLabel";
+            Label.Position = new Vector2(-40, -20);
+            Label.HorizontalAlignment = HorizontalAlignment.Center;
+            AddChild(Label);
+        }
+        Label.Visible = false;
+    }
+
+    public override void _Process(double delta)
+    {
+        if (!_isSpraying) return;
+
+        float remaining = _sprayDuration - _sprayTimer;
+        if (remaining < 0f) remaining = 0f;
+        Label.Text = Mathf.CeilToInt(remaining).ToString();
     }
 
     public override void _PhysicsProcess(double delta)
     {
+        // 倒计时（独立于玩家位置，触发后持续计时）
+        if (_isSpraying)
+        {
+            _sprayTimer += (float)delta;
+            if (_sprayTimer >= _sprayDuration)
+            {
+                _isSpraying = false;
+                Label.Visible = false;
+                return;
+            }
+        }
+
         // 粒子喷射中 + 玩家在受力区域内 → 施加力
         if (!_isSpraying || !_playerInArea || _player == null) return;
 
@@ -82,6 +122,9 @@ public partial class Wine : Node2D
         {
             Particles.Emitting = true;
             _isSpraying = true;
+            _sprayTimer = 0f;
+            _sprayDuration = (float)Particles.Lifetime;
+            Label.Visible = true;
         }
     }
 
@@ -99,8 +142,9 @@ public partial class Wine : Node2D
 
     private void OnParticlesFinished()
     {
-        // 粒子播放结束，喷射结束
+        // 粒子播放结束，喷射结束（_PhysicsProcess 中的计时器已优先处理）
         _isSpraying = false;
+        Label.Visible = false;
     }
 
     public override void _ExitTree()

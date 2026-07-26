@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://c83ky2vfrbgif"]
+
+[ext_resource type="Script" uid="uid://7mshfyep1nep" path="res://src/Objects/Bridge.cs" id="1_0hpim"]
+[ext_resource type="Texture2D" uid="uid://dpq2es0tltue5" path="res://Assets/Tricks/tile_0072.png" id="1_5m2m8"]
+[ext_resource type="Texture2D" uid="uid://dlb3gbmhbwxuu" path="res://Assets/Tricks/tile_0073.png" id="2_x3gu1"]
+[ext_resource type="Texture2D" uid="uid://8mawc8v7qpas" path="res://Assets/Tricks/tile_0074.png" id="3_x3gu1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hpim"]
+size = Vector2(18, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_44f47"]
+size = Vector2(18, 18)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0hpim"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="Bridge" type="Node2D" unique_id=2029624283 node_paths=PackedStringArray("Bridge1", "Bridge2", "Bridge3", "Label")]
+script = ExtResource("1_0hpim")
+Bridge1 = NodePath("Part1")
+Bridge2 = NodePath("Part2")
+Bridge3 = NodePath("Part3")
+Label = NodePath("Label")
+
+[node name="Part1" type="StaticBody2D" parent="." unique_id=399880353]
+
+[node name="Sprite2D" type="Sprite2D" parent="Part1" unique_id=1258022105]
+texture = ExtResource("1_5m2m8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Part1" unique_id=909858483]
+shape = SubResource("RectangleShape2D_0hpim")
+
+[node name="Part2" type="StaticBody2D" parent="." unique_id=458860618]
+position = Vector2(18, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Part2" unique_id=1561612241]
+texture = ExtResource("2_x3gu1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Part2" unique_id=1866230821]
+shape = SubResource("RectangleShape2D_0hpim")
+
+[node name="Part3" type="StaticBody2D" parent="." unique_id=2077380016]
+position = Vector2(36, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Part3" unique_id=1830506011]
+texture = ExtResource("3_x3gu1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Part3" unique_id=226400907]
+shape = SubResource("RectangleShape2D_44f47")
+
+[node name="Label" type="Label" parent="." unique_id=1595347349]
+z_index = 1
+offset_right = 18.0
+offset_bottom = 24.0
+text = "5"
+label_settings = SubResource("LabelSettings_0hpim")
+horizontal_alignment = 1
+vertical_alignment = 1

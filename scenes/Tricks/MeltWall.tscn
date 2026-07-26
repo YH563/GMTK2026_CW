@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://pqrgfyylrl2f"]
+
+[ext_resource type="Script" uid="uid://cgcbwjub5y1v3" path="res://src/Objects/MeltWall.cs" id="1_lha37"]
+[ext_resource type="Texture2D" uid="uid://bcodohg4jwve6" path="res://Assets/Tricks/tile_0004.png" id="1_q726r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lha37"]
+size = Vector2(18, 18)
+
+[sub_resource type="LabelSettings" id="LabelSettings_q726r"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="MeltWall" type="Node2D" unique_id=753379269 node_paths=PackedStringArray("Brick", "Label")]
+script = ExtResource("1_lha37")
+Brick = NodePath("Brick")
+Label = NodePath("Label")
+
+[node name="Brick" type="StaticBody2D" parent="." unique_id=216320660]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Brick" unique_id=339822077]
+shape = SubResource("RectangleShape2D_lha37")
+
+[node name="Sprite2D" type="Sprite2D" parent="Brick" unique_id=1933740440]
+texture = ExtResource("1_q726r")
+
+[node name="Label" type="Label" parent="." unique_id=691942627]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -12.0
+offset_right = 9.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "5"
+label_settings = SubResource("LabelSettings_q726r")
+horizontal_alignment = 1
+vertical_alignment = 1

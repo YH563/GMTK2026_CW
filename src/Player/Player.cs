@@ -32,8 +32,11 @@ public partial class Player : CharacterBody2D
 	private Vector2 _externalForce;
 	private const float ExternalForceDamping = 0.85f;
 
+	private Vector2 _rebrithPos;
+
 	public override void _Ready()
 	{
+		SetRebrithPoint();
 		AnimatedSprite ??= GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
@@ -97,6 +100,16 @@ public partial class Player : CharacterBody2D
 			AnimatedSprite.Play("Walk");
 		else if (AnimatedSprite.SpriteFrames.HasAnimation("Idle"))
 			AnimatedSprite.Play("Idle");
+	}
+
+	void SetRebrithPoint()
+	{
+		_rebrithPos = Position;
+	}
+
+	public void Remake()
+	{
+		Position = _rebrithPos;
 	}
 
 	/// <summary>由外部施加一个力（如击退、风、弹射）</summary>

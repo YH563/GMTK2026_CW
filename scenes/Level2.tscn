@@ -4,16 +4,18 @@
 [ext_resource type="PackedScene" uid="uid://bpj4y3coaosc" path="res://scenes/Tricks/Bread.tscn" id="2_kkoku"]
 [ext_resource type="PackedScene" uid="uid://bi0j602oi0usc" path="res://scenes/Tricks/InteractButton.tscn" id="3_l6gr7"]
 [ext_resource type="PackedScene" uid="uid://bo21kxb8hg5ui" path="res://scenes/Player.tscn" id="4_sp0w3"]
-[ext_resource type="PackedScene" uid="uid://bl1u1qa0taswj" path="res://scenes/Tricks/Wine.tscn" id="5_qe5b6"]
 [ext_resource type="PackedScene" uid="uid://cu488xecmujp8" path="res://scenes/Tricks/Sausage.tscn" id="6_4p0dt"]
 [ext_resource type="Script" uid="uid://dgwhxr5bm1xpc" path="res://src/Camera/GameCamera.cs" id="7_qwp14"]
 [ext_resource type="PackedScene" uid="uid://b4u33ltxy1814" path="res://scenes/Tricks/Candle.tscn" id="8_xpq2v"]
+[ext_resource type="Script" uid="uid://ds8cm8v7bilmi" path="res://src/Objects/DeadWall.cs" id="9_0jmjk"]
+[ext_resource type="PackedScene" uid="uid://c83ky2vfrbgif" path="res://scenes/Tricks/Bridge.tscn" id="10_v8268"]
+[ext_resource type="PackedScene" uid="uid://pqrgfyylrl2f" path="res://scenes/Tricks/MeltWall.tscn" id="11_rcugv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwp14"]
 size = Vector2(38.75, 853.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xpq2v"]
-size = Vector2(35.00006, 1440)
+size = Vector2(1438.5, 63.5)
 
 [node name="Level2" type="Node2D" unique_id=11177668]
 
@@ -32,6 +34,10 @@ position = Vector2(189, 279)
 rotation = 4.712389
 
 [node name="Button3" parent="." unique_id=150049346 instance=ExtResource("3_l6gr7")]
+visible = false
+position = Vector2(99, 405)
+
+[node name="Button4" parent="." unique_id=68391553 instance=ExtResource("3_l6gr7")]
 position = Vector2(99, 405)
 
 [node name="Button2" parent="." unique_id=470000877 instance=ExtResource("3_l6gr7")]
@@ -45,29 +51,8 @@ position = Vector2(693, 583)
 
 [node name="Player" parent="." unique_id=1017661166 instance=ExtResource("4_sp0w3")]
 z_index = 1
-position = Vector2(75, 400)
+position = Vector2(70, 396)
 scale = Vector2(0.3, 0.3)
-
-[node name="Wine" parent="." unique_id=857438027 node_paths=PackedStringArray("ButtonNode", "PlayerObject") instance=ExtResource("5_qe5b6")]
-position = Vector2(117, 441)
-JetForce = 200.0
-ButtonNode = NodePath("../Button3")
-PlayerObject = NodePath("../Player")
-
-[node name="Wine2" parent="." unique_id=1739173902 node_paths=PackedStringArray("ButtonNode", "PlayerObject") instance=ExtResource("5_qe5b6")]
-position = Vector2(243, 259)
-JetDir = Vector2(-1, 0)
-JetForce = 200.0
-ButtonNode = NodePath("../Button")
-PlayerObject = NodePath("../Player")
-
-[node name="Sausage" parent="." unique_id=1844355258 node_paths=PackedStringArray("PlayerObject", "ButtonNode") instance=ExtResource("6_4p0dt")]
-position = Vector2(801, 709)
-Length = 3
-MaxDistance = 108
-PlayerObject = NodePath("../Player")
-MoveDir = Vector2(0, -1)
-ButtonNode = NodePath("../Button7")
 
 [node name="Sausage2" parent="." unique_id=1566220217 node_paths=PackedStringArray("PlayerObject", "ButtonNode") instance=ExtResource("6_4p0dt")]
 position = Vector2(1143, 691)
@@ -103,15 +88,9 @@ shape = SubResource("RectangleShape2D_qwp14")
 position = Vector2(1460.25, 420.5)
 shape = SubResource("RectangleShape2D_qwp14")
 
-[node name="AirWall3" type="StaticBody2D" parent="." unique_id=1383973137]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AirWall3" unique_id=1303732254]
-position = Vector2(720, 829.5)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_xpq2v")
-
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=109815526]
 visible = false
+scale = Vector2(0.2, 0.2)
 color = Color(0, 0, 0, 1)
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=604073329]
@@ -120,10 +99,29 @@ offset_right = 1440.0
 offset_bottom = 811.0
 color = Color(0.44336173, 0.189919, 0.09450758, 1)
 
-[node name="Candle" parent="ColorRect" unique_id=338929938 node_paths=PackedStringArray("PlayerObject") instance=ExtResource("8_xpq2v")]
-position = Vector2(639, 583)
-PlayerObject = NodePath("../../Player")
-
 [node name="Candle" parent="." unique_id=85756073 node_paths=PackedStringArray("PlayerObject") instance=ExtResource("8_xpq2v")]
 position = Vector2(137, 277)
 PlayerObject = NodePath("../Player")
+
+[node name="DeadWall" type="Area2D" parent="." unique_id=1727171133]
+script = ExtResource("9_0jmjk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeadWall" unique_id=799937518]
+position = Vector2(719.75, 841.25)
+shape = SubResource("RectangleShape2D_xpq2v")
+
+[node name="Bridge" parent="." unique_id=2029624283 node_paths=PackedStringArray("PlayerObject", "ButtonNode") instance=ExtResource("10_v8268")]
+position = Vector2(747, 601)
+Length = 9
+PlayerObject = NodePath("../Player")
+ButtonNode = NodePath("../Button7")
+
+[node name="Candle2" parent="." unique_id=338929938 node_paths=PackedStringArray("PlayerObject") instance=ExtResource("8_xpq2v")]
+position = Vector2(639, 583)
+PlayerObject = NodePath("../Player")
+
+[node name="MeltWall" parent="." unique_id=753379269 node_paths=PackedStringArray("PlayerObject", "ButtonNode") instance=ExtResource("11_rcugv")]
+position = Vector2(117, 439)
+Length = 10
+PlayerObject = NodePath("../Player")
+ButtonNode = NodePath("../Button4")
